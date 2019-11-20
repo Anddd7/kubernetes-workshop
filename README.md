@@ -34,6 +34,12 @@ Linux
 
 ### Deploy your first application
 
+docker stack with docker compose
+
+- [deploy configuration](https://docs.docker.com/compose/compose-file/)
+- deploy into k8s `docker stack deploy --compose-file=docker-compose.yml simple-app`
+- check status `kubectl get pods`/`kubectl get svc`
+
 ## Multiple-Nodes-Cluster
 
 ## Others

@@ -1,0 +1,28 @@
+version: "3"
+services:
+  connector:
+    # build: .
+    image: anddd7/k8s-ws-simple-app
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - redis
+    ports:
+      - 8080:8080
+    environment:
+      - REDIS_URL=redis://redis:6379
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 50M
+        reservations:
+          cpus: "0.25"
+          memory: 20M
