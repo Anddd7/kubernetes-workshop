@@ -10,6 +10,8 @@ Go Go Go...
       - [Deploy with kubernetes](#deploy-with-kubernetes)
   - [Multiple-Nodes-Cluster](#multiple-nodes-cluster)
   - [Others](#others)
+    - [Helm: The package manager for Kubernetes](#helm-the-package-manager-for-kubernetes)
+    - [Kubernetes Dashboard](#kubernetes-dashboard)
   - [How to Production](#how-to-production)
 
 ## Standalone/Single Cluster
@@ -84,5 +86,24 @@ Vagrant (ref `Vagrantfile`)
 - `vagrant ssh k8s-master`/`kubectl get nodes`
 
 ## Others
+
+### Helm: The package manager for Kubernetes
+
+packaged kubernetes application (contains full configuration)
+
+### Kubernetes Dashboard
+
+- install with recommended config
+  `kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta6/aio/deploy/recommended.yaml`
+- install with helm
+  `helm install stable/kubernetes-dashboard --name my-kubernetes-dashboard`
+- install with customized config (expose with node port)
+  `kubectl apply -f k8s-dashboard.yml`
+- access with proxy 
+  - get secret
+  - `kubectl proxy`/`kubectl proxy --address 0.0.0.0 --accept-hosts '.*'`
+
+
+
 
 ## How to Production
