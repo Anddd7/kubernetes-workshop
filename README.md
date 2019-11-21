@@ -3,23 +3,23 @@
 Go Go Go...
 
 - [Deploy your code in kubernetes](#deploy-your-code-in-kubernetes)
-  - [Standalone/Single Cluster](#standalonesingle-cluster)
-    - [Prepare](#prepare)
-    - [Deploy your first application](#deploy-your-first-application)
-      - [Resources of k8s](#resources-of-k8s)
-      - [Deploy with kubernetes](#deploy-with-kubernetes)
-  - [Multiple-Nodes-Cluster](#multiple-nodes-cluster)
-  - [Others](#others)
-    - [Helm: The package manager for Kubernetes](#helm-the-package-manager-for-kubernetes)
-    - [Kubernetes Dashboard](#kubernetes-dashboard)
-      - [kubectl proxy](#kubectl-proxy)
-      - [secret](#secret)
-    - [Monitoring with Prometheus/Grafana/Alertmanager](#monitoring-with-prometheusgrafanaalertmanager)
-  - [How to Production](#how-to-production)
+- [Standalone/Single Cluster](#standalonesingle-cluster)
+  - [Prepare](#prepare)
+  - [Deploy your first application](#deploy-your-first-application)
+    - [Resources of k8s](#resources-of-k8s)
+    - [Deploy with kubernetes](#deploy-with-kubernetes)
+- [Multiple-Nodes-Cluster](#multiple-nodes-cluster)
+- [Sharp Weapons](#sharp-weapons)
+  - [Helm: The package manager for Kubernetes](#helm-the-package-manager-for-kubernetes)
+  - [Kubernetes Dashboard](#kubernetes-dashboard)
+    - [kubectl proxy](#kubectl-proxy)
+    - [secret](#secret)
+  - [Monitoring with Prometheus/Grafana/Alertmanager](#monitoring-with-prometheusgrafanaalertmanager)
+- [How to Production](#how-to-production)
 
-## Standalone/Single Cluster
+# Standalone/Single Cluster
 
-### Prepare
+## Prepare
 
 MacOS
 
@@ -27,28 +27,32 @@ You have 2 ways to set up kubernetes in your desktop.
 
 - Docker Desktop
   - upgrade your Docker Desktop to latest
-  - install/enable kubernetes
-  - just run `kubectl version`
-- minikube (a small VM)
-  - `brew install minikube`/`brew reinstall minikube`
-  - `minikube start`
-  - `minikube ssh`
-  - `kubectl get nodes`
+  - install/enable kubernetes in Docker Desktop
+  - check your cluster `kubectl version`
+
+* minikube (a small VM)
+  ```bash
+  brew install minikube
+  # brew reinstall minikube
+  minikube start
+  minikube ssh
+  $minikube kubectl get nodes
+  ```
 
 Linux
 
 - [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
-### Deploy your first application
+## Deploy your first application
 
 docker stack with docker compose
 
-- [deploy configuration](https://docs.docker.com/compose/compose-file/)
-- deploy into k8s `docker stack deploy --compose-file=docker-compose.yml simple-app`
-- check status `kubectl get pod`/`kubectl get svc`/`kubectl get deployment`
+- write docker compose, and set [deploy configuration](https://docs.docker.com/compose/compose-file/)
+- deploy into k8s: `docker stack deploy --compose-file=docker-compose.yml simple-app`
+- check status: `kubectl get pod` | `kubectl get svc` | `kubectl get deployment`
 
-#### Resources of k8s
+### Resources of k8s
 
 Pod:
 
@@ -72,13 +76,12 @@ Service:
 - load balancing
 - expose port
 
-#### Deploy with kubernetes
+### Deploy with kubernetes
 
 - (optional) convert docker compose with [kompose](https://github.com/kubernetes/kompose)
-- write configuration file
-- `kubectl apply -f kubernetes.yml`
+- write configuration file, then: `kubectl apply -f kubernetes.yml`
 
-## Multiple-Nodes-Cluster
+# Multiple-Nodes-Cluster
 
 Vagrant (ref `Vagrantfile`)
 
@@ -86,17 +89,19 @@ Vagrant (ref `Vagrantfile`)
 - install kubectl
 - install kubeadm (master)
   - copy config file to node
-- `vagrant ssh k8s-master`/`kubectl get nodes`
+- run: `vagrant ssh k8s-master`/`kubectl get nodes`
 
-## Others
+# Sharp Weapons
 
-### Helm: The package manager for Kubernetes
+## Helm: The package manager for Kubernetes
 
 packaged kubernetes application (contains full configuration)
 
 - [install and initial](https://helm.sh/docs/intro/install/)
 
-### Kubernetes Dashboard
+## Kubernetes Dashboard
+
+a fancy and multifunction dashboard
 
 - install with recommended config
   `kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta6/aio/deploy/recommended.yaml`
@@ -106,25 +111,45 @@ packaged kubernetes application (contains full configuration)
   `kubectl apply -f k8s-dashboard.yml`
 - access with proxy
 
-#### kubectl proxy
-> kubernetes proxy will expose inner service to 8081, can access services with:
-> `kubectl proxy`/`kubectl proxy --address 0.0.0.0 --accept-hosts '.*'`
-> `http://<kubernetes_master_address>/<api>/v1/namespaces/<namespace_name>/services/[https:]<service_name>:[port_name]/proxy`
-> e.g dashboard: `http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/`
+### kubectl proxy
 
-#### secret
-> You can get the secrets from dashboard or `kubectl get secrets`
+kubernetes proxy will expose inner service to 8081, can access services with:
 
-### Monitoring with Prometheus/Grafana/Alertmanager
+```bash
+kubectl proxy
+# kubectl proxy --address 0.0.0.0 --accept-hosts '.*'
+```
+
+access the service with: `http://<kubernetes_master_address>/<api>/v1/namespaces/<namespace_name>/services/[https:]<service_name>:[port_name]/proxy`
+
+e.g Dashboard: http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+### secret
+
+Don't forget get the secret of dashboard from `kubectl get secrets`
+
+## Monitoring with Prometheus/Grafana/Alertmanager
+
+a lot of super fancy dashboards
+
+```bash
+# 全家桶 with helm
+helm install prometheus-operator stable/prometheus-operator -n monitoring
+
+kubectl get pods -n monitoring
+kubectl get svc -n monitoring
+
+# port-forward
+kubectl port-forward -n monitoring <pod> <port>
+
+# expose service with node port
+kubectl edit svc <service_name>
+
+# proxy (tips: need to modify helm config to redirect grafana api)
+kubectl proxy
+curl http://localhost:8001/api/v1/namespaces/monitoring/services/prometheus-operator-prometheus:web/proxy/
+```
 
 [More detals](https://itnext.io/kubernetes-monitoring-with-prometheus-in-15-minutes-8e54d1de2e13)
 
-- install all with one line: `helm install prometheus-operator stable/prometheus-operator -n monitoring`
-- access with 
-  - port-forward: `kubectl port-forward -n monitoring <pod> <port>`
-  - modify the service: `kubectl edit svc <>`
-  - by proxy with service and port name:
-    - `prometheus-operator-prometheus:web`/`prometheus-operator-grafana:service`/`prometheus-operator-alertmanager:web`
-    - (tips) need to modify helm config to redirect grafana api
-
-## How to Production
+# How to Production
