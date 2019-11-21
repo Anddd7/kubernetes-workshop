@@ -10,6 +10,7 @@ Go Go Go...
       - [Deploy with kubernetes](#deploy-with-kubernetes)
   - [Multiple-Nodes-Cluster](#multiple-nodes-cluster)
   - [Others](#others)
+  - [How to Production](#how-to-production)
 
 ## Standalone/Single Cluster
 
@@ -74,4 +75,13 @@ Service:
 
 ## Multiple-Nodes-Cluster
 
+Vagrant (ref `Vagrantfile`)
+
+- install docker
+- install kubectl
+- install kubeadm (master)
+  - copy config file to node
+
 ## Others
+
+## How to Production
