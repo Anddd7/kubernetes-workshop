@@ -81,6 +81,7 @@ Vagrant (ref `Vagrantfile`)
 - install kubectl
 - install kubeadm (master)
   - copy config file to node
+- `vagrant ssh k8s-master`/`kubectl get nodes`
 
 ## Others
 
