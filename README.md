@@ -12,6 +12,9 @@ Go Go Go...
   - [Others](#others)
     - [Helm: The package manager for Kubernetes](#helm-the-package-manager-for-kubernetes)
     - [Kubernetes Dashboard](#kubernetes-dashboard)
+      - [kubectl proxy](#kubectl-proxy)
+      - [secret](#secret)
+    - [Monitoring with Prometheus/Grafana/Alertmanager](#monitoring-with-prometheusgrafanaalertmanager)
   - [How to Production](#how-to-production)
 
 ## Standalone/Single Cluster
@@ -91,6 +94,8 @@ Vagrant (ref `Vagrantfile`)
 
 packaged kubernetes application (contains full configuration)
 
+- [install and initial](https://helm.sh/docs/intro/install/)
+
 ### Kubernetes Dashboard
 
 - install with recommended config
@@ -99,11 +104,27 @@ packaged kubernetes application (contains full configuration)
   `helm install stable/kubernetes-dashboard --name my-kubernetes-dashboard`
 - install with customized config (expose with node port)
   `kubectl apply -f k8s-dashboard.yml`
-- access with proxy 
-  - get secret
-  - `kubectl proxy`/`kubectl proxy --address 0.0.0.0 --accept-hosts '.*'`
+- access with proxy
 
+#### kubectl proxy
+> kubernetes proxy will expose inner service to 8081, can access services with:
+> `kubectl proxy`/`kubectl proxy --address 0.0.0.0 --accept-hosts '.*'`
+> `http://<kubernetes_master_address>/<api>/v1/namespaces/<namespace_name>/services/[https:]<service_name>:[port_name]/proxy`
+> e.g dashboard: `http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/`
 
+#### secret
+> You can get the secrets from dashboard or `kubectl get secrets`
 
+### Monitoring with Prometheus/Grafana/Alertmanager
+
+[More detals](https://itnext.io/kubernetes-monitoring-with-prometheus-in-15-minutes-8e54d1de2e13)
+
+- install all with one line: `helm install prometheus-operator stable/prometheus-operator -n monitoring`
+- access with 
+  - port-forward: `kubectl port-forward -n monitoring <pod> <port>`
+  - modify the service: `kubectl edit svc <>`
+  - by proxy with service and port name:
+    - `prometheus-operator-prometheus:web`/`prometheus-operator-grafana:service`/`prometheus-operator-alertmanager:web`
+    - (tips) need to modify helm config to redirect grafana api
 
 ## How to Production
