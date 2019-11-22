@@ -19,7 +19,13 @@ Go Go Go...
   - [Tracking/Logging with ELK stack](#trackinglogging-with-elk-stack)
   - [Jenkins (Auto scaling slave)](#jenkins-auto-scaling-slave)
 - [How to Production](#how-to-production)
-  - [Initial your server](#initial-your-server)
+  - [Initial your server and cluster (ignore in local)](#initial-your-server-and-cluster-ignore-in-local)
+    - [terraform + kops](#terraform--kops)
+    - [terraform + ansible + kubeadm](#terraform--ansible--kubeadm)
+  - [CI/CD](#cicd)
+  - [Monitoring](#monitoring)
+  - [Credentials Managerment](#credentials-managerment)
+  - [Authentication](#authentication)
 
 # Standalone/Single Cluster
 
@@ -211,10 +217,69 @@ jenkins-74ccbf79d6-b6v7r   1/1     Running   1          2d
 
 _关于 AWS EKS 的部分只是通过采访和脑补进行的架构设计, 还未进行过实践._
 
-## Initial your server
+## Initial your server and cluster (ignore in local)
 
-kops
-eksctl
-terraform
-ansible
-kubeadm
+**[terraform](https://www.terraform.io/)**: infrastructure resouces as code, manage S3, RDS as well as EC2
+
+- ref [cloud formation](https://aws.amazon.com/cloudformation/)
+
+**ansible**: infrastructure server as code, exec command in cluster
+
+- simplify shell
+- e.g https://github.com/ctienshi/kubernetes-ansible/blob/master/centos/playbooks/setting_up_nodes.yml
+- e.g [set up k8s cluster on vagrant with ansible](https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/)
+
+**[kops](https://github.com/kubernetes/kops)**: create resouce and set up kubernetes cluster with one command
+
+- terraform + ansible ?
+- integrate with terraform
+- ref [eksctl](https://eksctl.io/)
+
+**kubeadm**: set up cluster
+
+- have to install required tools before this
+
+### terraform + kops
+
+[Deploying Kubernetes clusters with kops and Terraform](https://medium.com/bench-engineering/deploying-kubernetes-clusters-with-kops-and-terraform-832b89250e8e)
+[Building Kubernetes clusters with Terraform](https://github.com/kubernetes/kops/blob/master/docs/terraform.md)
+
+### terraform + ansible + kubeadm
+
+can customize server with ansible
+
+## CI/CD
+
+- Git
+  - source code
+- Jenkins
+  - test: report
+  - build: dist/jar...
+  - docker build: image with new tag
+  - deploy dev: helm install with dev environment
+  - deploy ...
+- Docker registry
+  - docker image in registry
+- Helm registry
+  - helm config in registry
+
+## Monitoring
+
+- elk
+- prometheus
+- kubernetes dashbord
+- ...
+
+> [cloud watch](https://aws.amazon.com/cloudwatch/)
+
+## Credentials Managerment
+
+should separate with other code, only visible for devops and manager
+
+- helm
+- vault
+
+## Authentication
+
+- kubernetes scretes
+- aws iam
