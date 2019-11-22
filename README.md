@@ -2,7 +2,20 @@
 
 Go Go Go...
 
+## Required Environment
+
+MacOS
+
+- **docker-desktop**
+  - upgrade to latest version and enable kubernetes
+- **helm**
+
+(optional)
+- **vagrant**, and add `ubuntu/xenial64 20191108.0.0` if you want to install REAL cluster in VM
+
+
 - [Deploy your code in kubernetes](#deploy-your-code-in-kubernetes)
+  - [Required Environment](#required-environment)
 - [Standalone/Single Cluster](#standalonesingle-cluster)
   - [Prepare](#prepare)
   - [Deploy your first application](#deploy-your-first-application)
