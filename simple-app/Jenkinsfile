@@ -33,7 +33,7 @@ volumes: [
                 sh "cd ./simple-app"
 
                 withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                    def image = docker.build("anddd7/k8s-ws-simple-app:$BUILD_NUMBER")
+                    def image = docker.build("anddd7/k8s-ws-simple-app:$BUILD_NUMBER","./simple-app")
                     image.push()
                 }
             }
