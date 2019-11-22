@@ -15,9 +15,11 @@ Go Go Go...
     - [kubectl proxy](#kubectl-proxy)
     - [secret](#secret)
   - [Monitoring with Prometheus/Grafana/Alertmanager](#monitoring-with-prometheusgrafanaalertmanager)
+    - [port forward](#port-forward)
   - [Tracking/Logging with ELK stack](#trackinglogging-with-elk-stack)
   - [Jenkins (Auto scaling slave)](#jenkins-auto-scaling-slave)
 - [How to Production](#how-to-production)
+  - [Initial your server](#initial-your-server)
 
 # Standalone/Single Cluster
 
@@ -100,18 +102,23 @@ Vagrant (ref `Vagrantfile`)
 packaged kubernetes application (contains full configuration)
 
 - [install and initial](https://helm.sh/docs/intro/install/)
+- deploy chart with `helm install <name> <chart_name> -n <namespace>`
+- list `helm list --all-namespaces`
 
 ## Kubernetes Dashboard
 
 a fancy and multifunction dashboard
 
-- install with recommended config
-  `kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta6/aio/deploy/recommended.yaml`
-- install with helm
-  `helm install stable/kubernetes-dashboard --name my-kubernetes-dashboard`
-- install with customized config (expose with node port)
-  `kubectl apply -f k8s-dashboard.yml`
-- access with proxy
+```bash
+# install with recommended config
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta6/aio/deploy/recommended.yaml
+
+# install with helm (recommended)
+helm install kubernetes-dashboard stable/kubernetes-dashboard -n kubernetes-dashboard
+
+# install with customized config (expose with node port)
+kubectl apply -f k8s-dashboard.yml
+```
 
 ### kubectl proxy
 
@@ -122,9 +129,9 @@ kubectl proxy
 # kubectl proxy --address 0.0.0.0 --accept-hosts '.*'
 ```
 
-access the service with: `http://<kubernetes_master_address>/<api>/v1/namespaces/<namespace_name>/services/[https:]<service_name>:[port_name]/proxy`
+access the service with: `http://<kubernetes_master_address>/<api>/v1/namespaces/<namespace_name>/services/[https:]<service_name>:<port_name></port_name>/proxy`
 
-e.g Dashboard: http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+e.g Dashboard: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:https/proxy
 
 ### secret
 
@@ -141,12 +148,6 @@ helm install prometheus-operator stable/prometheus-operator -n monitoring
 kubectl get pods -n monitoring
 kubectl get svc -n monitoring
 
-# port-forward
-kubectl port-forward -n monitoring <pod> <port>
-
-# expose service with node port
-kubectl edit svc <service_name>
-
 # proxy (tips: need to modify helm config to redirect grafana api)
 kubectl proxy
 curl http://localhost:8001/api/v1/namespaces/monitoring/services/prometheus-operator-prometheus:web/proxy/
@@ -154,13 +155,23 @@ curl http://localhost:8001/api/v1/namespaces/monitoring/services/prometheus-oper
 
 [More detals](https://itnext.io/kubernetes-monitoring-with-prometheus-in-15-minutes-8e54d1de2e13)
 
+### port forward
+
+expose pod's port to node's port
+
+```bash
+# port-forward
+kubectl port-forward -n monitoring <pod> <port>
+
+# edit and expose service with node port
+kubectl edit svc <service_name>
+```
+
 ## Tracking/Logging with ELK stack
+
 ```bash
 # 一键安装
 helm install elk stable/elastic-stack -n elk
-
-# port-forward
-kubectl port-forward -n elk <pod> <port>
 ```
 
 ## Jenkins (Auto scaling slave)
@@ -168,9 +179,6 @@ kubectl port-forward -n elk <pod> <port>
 ```bash
 # 一键安装
 helm install jenkins stable/jenkins -n jenkins
-
-# port-forward
-kubectl port-forward -n jenkins <pod> <port>
 ```
 
 **config a multiple stage pipeline**
@@ -201,4 +209,12 @@ jenkins-74ccbf79d6-b6v7r   1/1     Running   1          2d
 
 **target: build a pipeline to deploy your code to kubernetes cluster with different environment**
 
+_关于 AWS EKS 的部分只是通过采访和脑补进行的架构设计, 还未进行过实践._
 
+## Initial your server
+
+kops
+eksctl
+terraform
+ansible
+kubeadm
