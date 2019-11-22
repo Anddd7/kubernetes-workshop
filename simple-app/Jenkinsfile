@@ -1,0 +1,42 @@
+def label = "worker-${UUID.randomUUID().toString()}"
+
+podTemplate(label: label, containers: [
+    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
+],
+volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+]) {
+    node(label) {
+        def myRepo = checkout scm
+        def gitCommit = myRepo.GIT_COMMIT
+        def gitBranch = myRepo.GIT_BRANCH
+        def shortGitCommit = "${gitCommit[0..10]}"
+        def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+ 
+        stage('Prepare') {
+            sh """
+                pwd
+                ls
+            """
+        }
+
+        stage('Test') {
+            echo "No any test"
+        }
+
+        stage('Build') {
+            echo "No need to build"
+        }
+
+        stage('Build Docker image') {
+            container("docker"){
+                sh "cd ./simple-app"
+
+                withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+                    def image = docker.build("anddd7/k8s-ws-simple-app:$BUILD_NUMBER")
+                    image.push()
+                }
+            }
+        }
+    }
+}

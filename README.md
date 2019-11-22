@@ -26,6 +26,8 @@ Go Go Go...
   - [Monitoring](#monitoring)
   - [Credentials Managerment](#credentials-managerment)
   - [Authentication](#authentication)
+- [Complete Example](#complete-example)
+  - [build pipeline with Jenkinsfile](#build-pipeline-with-jenkinsfile)
 
 # Standalone/Single Cluster
 
@@ -175,6 +177,8 @@ kubectl edit svc <service_name>
 
 ## Tracking/Logging with ELK stack
 
+> !!! delete other chart first, due to memory CPU limit
+
 ```bash
 # 一键安装
 helm install elk stable/elastic-stack -n elk
@@ -189,7 +193,7 @@ helm install jenkins stable/jenkins -n jenkins
 
 **config a multiple stage pipeline**
 
-```Jenkinsfile
+```groovy
 node {
     stage('Hello') {
         echo 'Hello'
@@ -283,3 +287,19 @@ should separate with other code, only visible for devops and manager
 
 - kubernetes scretes
 - aws iam
+
+# Complete Example
+
+## build pipeline with Jenkinsfile
+
+Jenkinsfile - build
+
+- kubernetes-plugin
+- docker-plugin
+
+pipeline
+[!img](./images/jenkins-config.jpg)
+
+Jenkinsfile - deploy
+
+Heml
