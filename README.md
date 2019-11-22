@@ -15,6 +15,7 @@ Go Go Go...
     - [kubectl proxy](#kubectl-proxy)
     - [secret](#secret)
   - [Monitoring with Prometheus/Grafana/Alertmanager](#monitoring-with-prometheusgrafanaalertmanager)
+  - [Tracking/Logging with ELK stack](#trackinglogging-with-elk-stack)
   - [Jenkins (Auto scaling slave)](#jenkins-auto-scaling-slave)
 - [How to Production](#how-to-production)
 
@@ -153,6 +154,15 @@ curl http://localhost:8001/api/v1/namespaces/monitoring/services/prometheus-oper
 
 [More detals](https://itnext.io/kubernetes-monitoring-with-prometheus-in-15-minutes-8e54d1de2e13)
 
+## Tracking/Logging with ELK stack
+```bash
+# 一键安装
+helm install elk stable/elastic-stack -n elk
+
+# port-forward
+kubectl port-forward -n elk <pod> <port>
+```
+
 ## Jenkins (Auto scaling slave)
 
 ```bash
@@ -189,4 +199,6 @@ jenkins-74ccbf79d6-b6v7r   1/1     Running   1          2d
 
 # How to Production
 
-target: build a pipeline to deploy your code to kubernetes cluster with different environment
+**target: build a pipeline to deploy your code to kubernetes cluster with different environment**
+
+
