@@ -2,7 +2,7 @@
 
 Go Go Go...
 
-
+![img](./images/all-in-k8s.jpg)
 
 ## Required Environment
 
@@ -13,9 +13,8 @@ MacOS
 - **helm**
 
 (optional)
+
 - **vagrant**, and add `ubuntu/xenial64 20191108.0.0` if you want to install REAL cluster in VM
-
-
 
 - [Deploy your code in kubernetes](#deploy-your-code-in-kubernetes)
   - [Required Environment](#required-environment)
@@ -315,7 +314,7 @@ Jenkinsfile - build
 - docker-plugin
 
 pipeline
-[!img](./images/jenkins-config.jpg)
+![img](./images/jenkins-config.jpg)
 
 Jenkinsfile - deploy
 
