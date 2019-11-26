@@ -4,6 +4,7 @@ podTemplate(label: label, containers: [
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
 ],
 volumes: [
+    // bind host docker socket into pod volumn
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
 ]) {
     node(label) {
@@ -30,8 +31,6 @@ volumes: [
 
         stage('Build Docker image') {
             container("docker"){
-                sh "cd ./simple-app"
-
                 withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
                     def image = docker.build("anddd7/k8s-ws-simple-app:$BUILD_NUMBER","./simple-app")
                     image.push()

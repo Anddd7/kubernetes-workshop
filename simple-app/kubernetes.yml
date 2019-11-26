@@ -35,9 +35,11 @@ metadata:
 spec:
   selector:
     app: simple-app
-  type: LoadBalancer
+  type: LoadBalancer # 取决于云厂商的实现, 在单机测试时同 NodePort
+  # type: NodePort
   ports:
-    - port: 8080
+    - port: 18080
+      targetPort: 8080
 
 ---
 apiVersion: apps/v1
