@@ -72,15 +72,26 @@ Linux
 - [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
+Window
+
+- minikube
+
 ## Deploy your first application
 
-docker stack with docker compose
+docker stack for k8s, ref `./simple-app`
 
 - write docker compose, and set [deploy configuration](https://docs.docker.com/compose/compose-file/)
 - deploy into k8s: `docker stack deploy --compose-file=docker-compose.yml simple-app`
 - check status: `kubectl get pod` | `kubectl get svc` | `kubectl get deployment`
 
 ### Resources of k8s
+
+Master vs Node
+
+![img](./images/kubernetes-architecture.jpg)
+![img](./images/kubernetes-clusters.png)
+
+> master 节点也可以部署 pod
 
 Pod:
 
@@ -98,16 +109,17 @@ Deployment:
 
 - 升级版 RS, has deploy status
 
-Service:
+Service: [图解 Kubernetes Service](https://medium.com/google-cloud/kubernetes-nodeport-vs-loadbalancer-vs-ingress-when-should-i-use-what-922f010849e0)
 
-- network management
-- load balancing
-- expose port
+
+...
 
 ### Deploy with kubernetes
 
 - (optional) convert docker compose with [kompose](https://github.com/kubernetes/kompose)
 - write configuration file, then: `kubectl apply -f kubernetes.yml`
+
+> kubernetes can only use existing docker image, please build the docker image first (pull from dockerhub/build manually/build in pipeline)
 
 # Multiple-Nodes-Cluster
 
@@ -119,7 +131,11 @@ Vagrant (ref `Vagrantfile`)
   - copy config file to node
 - run: `vagrant ssh k8s-master`/`kubectl get nodes`
 
+> you can also use these script to init real servers
+
 # Sharp Weapons
+
+**工欲善其事，必先利其器**
 
 ## Helm: The package manager for Kubernetes
 
