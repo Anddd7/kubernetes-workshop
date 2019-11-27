@@ -43,6 +43,7 @@ MacOS
   - [Authentication](#authentication)
 - [Complete Example](#complete-example)
   - [build pipeline with Jenkinsfile](#build-pipeline-with-jenkinsfile)
+  - [deploy pipeline with Jenkinsfile](#deploy-pipeline-with-jenkinsfile)
 - [Change the World](#%08change-the-world)
 
 # Standalone/Single Cluster
@@ -110,7 +111,6 @@ Deployment:
 - 升级版 RS, has deploy status
 
 Service: [图解 Kubernetes Service](https://medium.com/google-cloud/kubernetes-nodeport-vs-loadbalancer-vs-ingress-when-should-i-use-what-922f010849e0)
-
 
 ...
 
@@ -322,19 +322,14 @@ should separate with other code, only visible for devops and manager
 
 # Complete Example
 
-## build pipeline with Jenkinsfile
+> will use docker hub to store image directly
 
-Jenkinsfile - build
+Dockerfile
+Jenkinsfile(build)
+Helm Chart
+Jenkinsfile(deploy)
 
-- kubernetes-plugin
-- docker-plugin
 
-pipeline
-![img](./images/jenkins-config.jpg)
-
-Jenkinsfile - deploy
-
-Heml
 
 # Change the World
 

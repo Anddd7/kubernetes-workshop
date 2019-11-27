@@ -1,0 +1,14 @@
+replicaCount: 2
+
+image:
+  repository: anddd7/k8s-ws-simple-app
+  pullPolicy: IfNotPresent
+
+resources: 
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+
+service:
+  type: NodePort
+  port: 8080
