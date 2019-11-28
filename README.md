@@ -42,8 +42,6 @@ MacOS
   - [Credentials Managerment](#credentials-managerment)
   - [Authentication](#authentication)
 - [Complete Example](#complete-example)
-  - [build pipeline with Jenkinsfile](#build-pipeline-with-jenkinsfile)
-  - [deploy pipeline with Jenkinsfile](#deploy-pipeline-with-jenkinsfile)
 - [Change the World](#%08change-the-world)
 
 # Standalone/Single Cluster
@@ -154,7 +152,7 @@ a fancy and multifunction dashboard
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta6/aio/deploy/recommended.yaml
 
 # install with helm (recommended)
-helm install kubernetes-dashboard stable/kubernetes-dashboard -n kubernetes-dashboard
+helm install kubernetes-dashboard stable/kubernetes-dashboard [-n kubernetes-dashboard]
 
 # install with customized config (expose with node port)
 kubectl apply -f k8s-dashboard.yml
@@ -183,10 +181,10 @@ a lot of super fancy dashboards
 
 ```bash
 # 全家桶 with helm
-helm install prometheus-operator stable/prometheus-operator -n monitoring
+helm install prometheus-operator stable/prometheus-operator [-n monitoring]
 
-kubectl get pods -n monitoring
-kubectl get svc -n monitoring
+kubectl get pods [-n monitoring]
+kubectl get svc [-n monitoring]
 
 # proxy (tips: need to modify helm config to redirect grafana api)
 kubectl proxy
@@ -201,7 +199,7 @@ expose pod's port to node's port
 
 ```bash
 # port-forward
-kubectl port-forward -n monitoring <pod> <port>
+kubectl port-forward [-n monitoring] <pod> <port>
 
 # edit and expose service with node port
 kubectl edit svc <service_name>
@@ -213,14 +211,14 @@ kubectl edit svc <service_name>
 
 ```bash
 # 一键安装
-helm install elk stable/elastic-stack -n elk
+helm install elk stable/elastic-stack [-n elk]
 ```
 
 ## Jenkins (Auto scaling slave)
 
 ```bash
 # 一键安装
-helm install jenkins stable/jenkins -n jenkins
+helm install jenkins stable/jenkins [-n jenkins]
 ```
 
 **config a multiple stage pipeline**
@@ -328,8 +326,6 @@ Dockerfile
 Jenkinsfile(build)
 Helm Chart
 Jenkinsfile(deploy)
-
-
 
 # Change the World
 

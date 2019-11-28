@@ -7,11 +7,14 @@
 - /templates
   - \_helpers.tpl: 动态拼接生成的一些 value
   - \*.yaml: 模板文件
-    > `include` from _\_helpers.tpl_
-    > `.Values` from _values.yaml_
-    > `.Chart` from _Chart.yaml_
+    > `include` from _\_helpers.tpl_ > `.Values` from _values.yaml_ > `.Chart` from _Chart.yaml_
 
 ## Deploy
 
 install: 安装
 upgrade: 更新
+package: 打包
+
+## Registry
+
+repo index: 仓库标记
