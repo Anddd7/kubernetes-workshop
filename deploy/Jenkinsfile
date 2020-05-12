@@ -1,0 +1,51 @@
+def label = "worker-${UUID.randomUUID().toString()}"
+
+podTemplate(label: label, containers: [
+    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.8.8', command: 'cat', ttyEnabled: true)
+],
+volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+]) {
+    node(label) {
+        def myRepo = checkout scm
+        def gitCommit = myRepo.GIT_COMMIT
+        def gitBranch = myRepo.GIT_BRANCH
+        def shortGitCommit = "${gitCommit[0..10]}"
+        def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+ 
+        stage('Prepare') {
+            container('node') {
+                sh """
+                    pwd
+                    echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
+                    echo "GIT_COMMIT=${gitCommit}" >> /etc/environment
+                    npm install
+                    """
+            }
+        }
+
+         stage('Prepare') {
+            sh """
+                pwd
+                ls
+            """
+        }
+
+        stage('Build Docker image') {
+            container('docker') {
+                withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+                    def image = docker.build("anddd7/awesome-resume:$BUILD_NUMBER")
+                    image.push()
+                }
+            }
+        }
+        stage('Deploy to Dev (local k8s)') {
+            container('kubectl') {
+                withKubeConfig([credentialsId: 'user1', serverUrl: 'https://api.k8s.my-company.com']) {
+                    sh 'kubectl apply -f my-kubernetes-directory'
+                }
+            }
+        }
+    }
+}

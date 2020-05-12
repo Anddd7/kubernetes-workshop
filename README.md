@@ -247,6 +247,8 @@ jenkins-74ccbf79d6-b6v7r   1/1     Running   1          2d
 
 # How to Production
 
+- [Kubernetes On AWS: Setup And Lessons Learned](https://medium.com/axons/kubernetes-on-aws-setup-and-lessons-learned-93f8322bc13a)
+
 **target: build a pipeline to deploy your code to kubernetes cluster with different environment**
 
 _关于 AWS EKS 的部分只是通过采访和脑补进行的架构设计, 还未进行过实践._
