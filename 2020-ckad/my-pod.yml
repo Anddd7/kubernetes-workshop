@@ -1,0 +1,15 @@
+# k8s api version compatible with this resource
+apiVersion: v1
+#  resource name
+kind: Pod
+metadata:
+  name: my-pod
+  # for label management, quick search/filter
+  labels:
+    app: myapp
+# specification of resources
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox
+    command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
