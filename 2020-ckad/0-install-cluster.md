@@ -25,7 +25,12 @@ Note that if you want to use a newer version of Kubernetes, change the version i
 ```bash
 sudo apt-get update
 
-sudo apt-get install -y docker-ce=18.06.1~ce~3-0~ubuntu kubelet=1.14.5-00 kubeadm=1.14.5-00 kubectl=1.14.5-00
+# required tools
+sudo apt-get install -y apt-transport-https curl
+
+# install docke kubelet kubeadm kubectl for all nodes
+sudo apt-get install -y docker-ce kubelet kubeadm kubectl
+# sudo apt-get install -y docker-ce=18.06.1~ce~3-0~ubuntu kubelet=1.14.5-00 kubeadm=1.14.5-00 kubectl=1.14.5-00
 
 sudo apt-mark hold docker-ce kubelet kubeadm kubectl
 ```
@@ -33,11 +38,11 @@ sudo apt-mark hold docker-ce kubelet kubeadm kubectl
 ### Enable iptables bridge call:
 
 ```bash
-echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
-
-# sudo modprobe br_filter
-
-sudo sysctl -p
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sudo sysctl --system
 ```
 
 ## On the Kube master server
@@ -68,9 +73,6 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ### Install Flannel networking:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
-Note: If you are using Kubernetes 1.16 or later, you will need to use a newer flannel installation yaml instead:
-
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/3f7d3e6c24f641e7ff557ebcea1136fdf4b1b6a1/Documentation/kube-flannel.yml
 ```
 
