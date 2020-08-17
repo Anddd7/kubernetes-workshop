@@ -1,0 +1,15 @@
+# adapter/ambassador和sidecar结构一样, 只是副container的职责略微不同
+# 有的时候sidecar/adapter/ambassador会同时存在
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.15.8
+      ports:
+        - containerPort: 80
+    - name: busybox-sidecar
+      image: busybox
+      command: ["sh", "-c", "while true; do sleep 30; done;"]
