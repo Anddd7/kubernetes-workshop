@@ -4,6 +4,6 @@ metadata:
   name: ping-pod
 spec:
   containers:
-    - name: busybox-sidecar
-      image: busybox
+    - name: ping-container
+      image: radial/busyboxplus:curl
       command: ["sh", "-c", "while true; do sleep 30; done;"]
