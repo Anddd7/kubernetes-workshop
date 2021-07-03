@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: dooku
+  name: dooku
+spec:
+  volumes:
+  - name: shared-vol
+    hostPath:
+      path: /data/dooku
+  containers:
+  - image: redis
+    name: dooku
+    resources: {}
+    volumeMounts:
+    - name: shared-vol
+      mountPath: /var/log/dooku
+  - image: nginx
+    name: nginx
+    resources: {}
+    volumeMounts:
+    - name: shared-vol
+      mountPath: /var/log/dooku
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
