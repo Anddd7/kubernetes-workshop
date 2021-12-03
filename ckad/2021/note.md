@@ -1,4 +1,16 @@
-- 安装flannel和calico时要注意`init --pod-network-cidr=xxx.xxx.xxx.xxx/16`的默认值
-- 安装metric server `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
-  - 测试环境需要ignore tls validation: 下载`components.yaml`, 修改metric service的启动参数 + `--kubelet-insecure-tls`
-  > Kubelet certificate needs to be signed by cluster Certificate Authority (or disable certificate validation by passing --kubelet-insecure-tls to Metrics Server)
+
+// 线上环境和课程
+https://www.katacoda.com/courses/kubernetes/kubectl-run-containers
+https://www.katacoda.com/courses/kubernetes
+https://labs.play-with-k8s.com/
+
+// CKAD 练习题
+https://github.com/stretchcloud/cka-lab-practice
+https://github.com/dgkanatsios/CKAD-exercises
+https://github.com/ysinjab/ckad-kubernetes/wiki
+https://github.com/TechPrimers/k8s-the-easy-way
+https://github.com/Shehanka/CKAD-training
+
+// 考试相关
+https://docs.linuxfoundation.org/tc-docs/certification/lf-candidate-handbook
+https://docs.linuxfoundation.org/tc-docs/certification/tips-cka-and-ckad
